@@ -1,51 +1,77 @@
-Requirements
-------------
+# Gilded Rose Refactoring Kata by Alex Gemmell using PHP v7.3
 
-**PHP 7:**
+This project was forked from https://github.com/emilybache/GildedRose-Refactoring-Kata.
+ 
+I updated the PHP7 folder to use Docker so that there's no need to run PHP locally. 
 
-This is usually bundled with your operating system, or fetchable using a package manager like `apt` or `homebrew`.
+My refactored solution to this Gilded Rose kata can be found at [./src/GildedRose.php](./src/GildedRose.php)
 
-Windows users can find the latest version here: https://windows.php.net/download#php-7.3
+See commit history for each refactored step. 
 
-If you want to compile from source code, that can be found here: https://www.php.net/downloads.php
+## Docker Container Management
 
-**Composer:**
-
-Composer is PHP's main package and dependency management tool.
-
-It can be downloaded here: https://getcomposer.org/download/
-
-Getting Started
----------------
-
-To begin the kata, install the dependencies and run `phpunit`:
-
+Build the PHP container or restart it the container was in a stopped state
 ```
-cd php7
-composer install
-vendor/bin/phpunit
+> docker-compose up -d
 ```
 
-If the "install" command does not work, try running `composer update` instead.
-This will tell composer that it has permission to look for a newer version of
-its dependencies.
-
-If things are still not cooperating, you can try this extreme approach:
-
+Stop the container (does not remove the container volume)
 ```
-composer remove phpunit/phpunit
-composer require phpunit/phpunit
+> docker-compose stop 
 ```
 
-To exercise the code outside of phpunit, for example to visually confirm that it is working,
-use the `texttest_fixture` script:
-
+Start a previously stopped container
 ```
-php fixtures/texttest_fixture.php
+> docker-compose start 
 ```
 
-Tips
-----
+Stop and remove the container volume (will get built again when `docker-composer up -d` is run)
+```
+> docker-compose down
+```
 
-PHPUnit has a very thorough reference manual. It would be particularly useful to explore the
-[Data Providers](https://phpunit.readthedocs.io/en/8.1/writing-tests-for-phpunit.html#data-providers) section.
+Rebuild the container (required if any of the Dockerfiles have been changed)
+```
+> docker-compose up -d --build
+```
+
+### Run commands in Docker
+```
+> docker exec <container name/ID> <command to run>
+```
+
+## Install PHP Composer Packages
+```
+> docker exec -it agemmell-gilded-rose composer install
+```
+
+## Run Tests
+```
+> docker exec -it agemmell-gilded-rose php vendor/bin/phpunit
+```
+
+## Debugging PHP
+For some reason xdebug will not connect to PHPStorm using the host IP address that docker creates (e.g. 192.168.192.1).
+
+A solution on MacOS is to create an alias IP to your host machine's localhost and tell xdebug to use that IP.
+The php docker config expects this IP to be `10.254.254.254`.  
+(You can set it to whatever you want but just be sure to update the php docker config and rebuild the box) 
+```
+> sudo ifconfig lo0 alias 10.254.254.254
+```
+
+You can verify this alias IP is attached to your `lo0` device by inspecting the output when running `ifconfig` on your host machine:
+```
+> ifconfig
+```
+
+Enable xdebug on the php docker box:
+```
+(from outside the container)
+> docker exec -it agemmell-gilded-rose ./toggle-xdebug
+PHP Xdebug Enabled & OPcache Disabled!
+
+(from inside the container)
+> /var/www/app/toggle-xdebug
+PHP Xdebug Disabled & OPcache Enabled!
+```
