@@ -16,16 +16,33 @@ final class GildedRose
     {
         foreach ($this->items as $item) {
 
-            if ($item->name === 'Aged Brie') {
+            if (
+                $item->name === 'Aged Brie' ||
+                $item->name === 'Backstage passes to a TAFKAL80ETC concert'
+            ) {
                 switch ($item->name) {
                     case 'Aged Brie':
-                        if ($item->quality < 50) $item->quality++;
+                        if ($item->quality < 50) {
+                            $item->quality++;
+                        }
                         $item->sell_in--;
                         if ($item->sell_in < 0 && $item->quality < 50) {
                             $item->quality++;
                         }
                         break;
                     case 'Backstage passes to a TAFKAL80ETC concert':
+                        if ($item->sell_in <= 0) {
+                            $item->quality = 0;
+                        } elseif ($item->quality < 50) {
+                            $item->quality++;
+                            if ($item->quality < 50 && $item->sell_in < 11) {
+                                $item->quality++;
+                            }
+                            if ($item->quality < 50 && $item->sell_in < 6) {
+                                $item->quality++;
+                            }
+                        }
+                        $item->sell_in--;
                         break;
                     case 'Sulfuras, Hand of Ragnaros':
                         break;
