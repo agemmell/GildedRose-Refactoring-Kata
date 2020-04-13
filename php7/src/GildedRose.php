@@ -20,6 +20,7 @@ final class GildedRose
                 $item->name === 'Aged Brie'
                 || $item->name === 'Backstage passes to a TAFKAL80ETC concert'
                 || $item->name === 'Sulfuras, Hand of Ragnaros'
+                || $item->name === 'foo'
             ) {
                 switch ($item->name) {
                     case 'Aged Brie':
@@ -49,7 +50,13 @@ final class GildedRose
                         // Never changes!
                         break;
                     default:
-                        
+                        if ($item->quality > 0) {
+                            $item->quality--;
+                        }
+                        if ($item->sell_in <= 0 && $item->quality > 0) {
+                            $item->quality--;
+                        }
+                        $item->sell_in--;
                 }
             } else {
 
