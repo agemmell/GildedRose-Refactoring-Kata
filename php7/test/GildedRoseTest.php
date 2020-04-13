@@ -44,6 +44,16 @@ class GildedRoseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $items[0]->quality);
     }
 
+    public function testSulfurasProductQualityStaysTheSameIfSellInIsNegative()
+    {
+        $items = [new Item("Sulfuras, Hand of Ragnaros", -2, 100)];
+        $gildedRose = new GildedRose($items);
+        $gildedRose->updateQuality();
+        $this->assertEquals("Sulfuras, Hand of Ragnaros", $items[0]->name);
+        $this->assertEquals(-2, $items[0]->sell_in);
+        $this->assertEquals(100, $items[0]->quality);
+    }
+
     public function testAgedBrie()
     {
         $items = [new Item("Aged Brie", 2, 1)];

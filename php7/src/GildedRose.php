@@ -17,8 +17,9 @@ final class GildedRose
         foreach ($this->items as $item) {
 
             if (
-                $item->name === 'Aged Brie' ||
-                $item->name === 'Backstage passes to a TAFKAL80ETC concert'
+                $item->name === 'Aged Brie'
+                || $item->name === 'Backstage passes to a TAFKAL80ETC concert'
+                || $item->name === 'Sulfuras, Hand of Ragnaros'
             ) {
                 switch ($item->name) {
                     case 'Aged Brie':
@@ -45,9 +46,10 @@ final class GildedRose
                         $item->sell_in--;
                         break;
                     case 'Sulfuras, Hand of Ragnaros':
+                        // Never changes!
                         break;
                     default:
-
+                        
                 }
             } else {
 
