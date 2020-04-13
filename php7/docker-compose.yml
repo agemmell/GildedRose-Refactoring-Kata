@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  php:
+    image: agemmell/gilded-rose
+    container_name: agemmell-gilded-rose
+    build:
+      context: .docker/php-fpm/.
+    volumes:
+      - ./:/var/www/app
