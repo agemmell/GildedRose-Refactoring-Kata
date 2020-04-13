@@ -125,4 +125,35 @@ class GildedRoseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(-1, $items[0]->sell_in);
         $this->assertEquals(0, $items[0]->quality);
     }
+
+
+    public function testConjuredItemDegradesTwiceAsFastAsNormalItems()
+    {
+        $items = [new Item("Conjured", 2, 5)];
+        $gildedRose = new GildedRose($items);
+        $gildedRose->updateQuality();
+        $this->assertEquals("Conjured", $items[0]->name);
+        $this->assertEquals(1, $items[0]->sell_in);
+        $this->assertEquals(3, $items[0]->quality);
+    }
+
+    public function testConjuredItemQualityStaysAtZero()
+    {
+        $items = [new Item("Conjured", 2, 0)];
+        $gildedRose = new GildedRose($items);
+        $gildedRose->updateQuality();
+        $this->assertEquals("Conjured", $items[0]->name);
+        $this->assertEquals(1, $items[0]->sell_in);
+        $this->assertEquals(0, $items[0]->quality);
+    }
+
+    public function testConjuredItemQualityDropsByFourAfterSellInIsZero()
+    {
+        $items = [new Item("Conjured", 0, 10)];
+        $gildedRose = new GildedRose($items);
+        $gildedRose->updateQuality();
+        $this->assertEquals("Conjured", $items[0]->name);
+        $this->assertEquals(-1, $items[0]->sell_in);
+        $this->assertEquals(6, $items[0]->quality);
+    }
 }

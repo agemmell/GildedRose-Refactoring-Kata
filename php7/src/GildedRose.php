@@ -42,6 +42,15 @@ final class GildedRose
                 case 'Sulfuras, Hand of Ragnaros':
                     // Never changes!
                     break;
+                case 'Conjured':
+                    if ($item->quality > 0) {
+                        $item->quality -= 2;
+                    }
+                    if ($item->sell_in <= 0 && $item->quality > 0) {
+                        $item->quality -= 2;
+                    }
+                    $item->sell_in--;
+                    break;
                 default:
                     if ($item->quality > 0) {
                         $item->quality--;
